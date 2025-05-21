@@ -1,0 +1,13 @@
+{
+  "name": "ftps-connection-test",
+  "version": "1.0.0",
+  "description": "Test FTPS server connection",
+  "main": "test-connection.js",
+  "type": "module",
+  "scripts": {
+    "test": "node test-connection.js"
+  },
+  "dependencies": {
+    "basic-ftp": "^5.0.3"
+  }
+} 
