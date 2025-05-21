@@ -62,7 +62,8 @@ async function tryConnectionMethods() {
       user,
       password,
       secure: true,
-      explicitTls: true
+      explicitTls: true,
+      secureOptions: { rejectUnauthorized: false } // Allow self-signed certificates
     };
     
     // Method 4: Explicit FTPS on port 990
@@ -72,7 +73,18 @@ async function tryConnectionMethods() {
       password,
       secure: true,
       explicitTls: true,
-      port: 990
+      port: 990,
+      secureOptions: { rejectUnauthorized: false } // Allow self-signed certificates
+    };
+    
+    // Method 5: Try with different username format 
+    const altCredentials = {
+      host,
+      user: 'stockfiles@globalftp.globaloring.com', // Try domain-qualified username
+      password,
+      secure: true,
+      explicitTls: true,
+      secureOptions: { rejectUnauthorized: false }
     };
     
     // Try each method until one works
@@ -80,12 +92,14 @@ async function tryConnectionMethods() {
     
     if (await testConnection(regularFtp)) {
       console.log('Success with regular FTP!');
+    } else if (await testConnection(explicitFtps)) { // Try explicit FTPS first since it got furthest
+      console.log('Success with explicit FTPS!');
     } else if (await testConnection(implicitFtps)) {
       console.log('Success with implicit FTPS!');
-    } else if (await testConnection(explicitFtps)) {
-      console.log('Success with explicit FTPS!');
     } else if (await testConnection(explicitFtps990)) {
       console.log('Success with explicit FTPS on port 990!');
+    } else if (await testConnection(altCredentials)) {
+      console.log('Success with alternative credentials!');
     } else {
       console.log('All connection attempts failed.');
       console.log('\nTroubleshooting tips:');
