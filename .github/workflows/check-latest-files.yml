@@ -16,8 +16,8 @@ jobs:
           node-version: '16'
       - name: Install dependencies
         run: npm install
-      - name: Run file checker
-        run: npm test
+      - name: Run latest files checker
+        run: npm run latest
         # If you want to use environment variables instead of config.js:
         # env:
         #   FTP_HOST: ${{ secrets.FTP_HOST }}

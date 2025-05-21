@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "node test-connection.js",
-    "start": "node test-connection.js"
+    "start": "node test-connection.js",
+    "latest": "node latest-files.js"
   },
   "dependencies": {
     "basic-ftp": "^5.0.3"
