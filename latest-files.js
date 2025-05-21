@@ -18,6 +18,9 @@ const folderPaths = [
   '/TEST/Processed'
 ];
 
+// Files to exclude
+const EXCLUDED_FILES = ['desktop.ini'];
+
 /**
  * Get the latest file from a directory
  * @param {ftp.Client} client - FTP client
@@ -31,8 +34,10 @@ async function getLatestFileFromFolder(client, folderPath) {
     // List all files in the directory
     const fileList = await client.list(folderPath);
     
-    // Filter out directories, keep only files
-    const files = fileList.filter(item => item.type === 1);
+    // Filter out directories and excluded files
+    const files = fileList.filter(item => 
+      item.type === 1 && !EXCLUDED_FILES.includes(item.name.toLowerCase())
+    );
     
     if (files.length === 0) {
       console.log(`No files found in ${folderPath}`);
