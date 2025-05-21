@@ -18,6 +18,15 @@ jobs:
         run: npm install
       - name: Run latest files checker
         run: npm run latest
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_PORT: ${{ secrets.FTP_PORT }}
+          FTP_SECURE: ${{ secrets.FTP_SECURE }}
+          FTP_EXPLICIT_TLS: ${{ secrets.FTP_EXPLICIT_TLS }}
+          FOLDER_1_PATH: ${{ secrets.FOLDER_1_PATH }}
+          FOLDER_2_PATH: ${{ secrets.FOLDER_2_PATH }}
         # If you want to use environment variables instead of config.js:
         # env:
         #   FTP_HOST: ${{ secrets.FTP_HOST }}

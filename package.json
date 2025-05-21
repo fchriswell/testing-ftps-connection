@@ -10,6 +10,7 @@
     "latest": "node latest-files.js"
   },
   "dependencies": {
-    "basic-ftp": "^5.0.3"
+    "basic-ftp": "^5.0.3",
+    "dotenv": "^16.3.1"
   }
 } 

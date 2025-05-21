@@ -1,5 +1,6 @@
 // Import the basic-ftp package
 import * as ftp from 'basic-ftp';
+import { ftpConfig, folderPaths } from './src/config.js';
 
 // Create an FTP client
 const client = new ftp.Client();
@@ -34,15 +35,11 @@ async function testConnection(options) {
 
 // Main function to try different connection methods
 async function tryConnectionMethods() {
-  const host = 'globalftp.globaloring.com';
-  const user = 'stockfiles';
-  const password = 'tBDNWuVyV1@4M5JJUdMUio{k';
-  
-  // Base options for port 21
+  // Base options from config but with port 21 explicitly set
   const baseOptions = {
-    host,
-    user,
-    password,
+    host: ftpConfig.host,
+    user: ftpConfig.user,
+    password: ftpConfig.password,
     port: 21
   };
   

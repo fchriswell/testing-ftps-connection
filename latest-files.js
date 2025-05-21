@@ -1,25 +1,9 @@
 // Import the basic-ftp package
 import * as ftp from 'basic-ftp';
-
-// FTP Configuration
-const ftpConfig = {
-  host: 'globalftp.globaloring.com',
-  user: 'stockfiles',
-  password: 'tBDNWuVyV1@4M5JJUdMUio%7Bk', // URL-encoded password
-  port: 21,
-  secure: true,
-  explicitTls: true,
-  secureOptions: { rejectUnauthorized: false } // Accept self-signed certificates
-};
-
-// Folder paths to check
-const folderPaths = [
-  '/TTO/Processed',
-  '/TEST/Processed'
-];
+import { ftpConfig, folderPaths, excludedFiles } from './src/config.js';
 
 // Files to exclude
-const EXCLUDED_FILES = ['desktop.ini'];
+const EXCLUDED_FILES = excludedFiles;
 
 /**
  * Get the latest file from a directory
@@ -72,6 +56,11 @@ async function checkLatestFiles() {
   
   try {
     console.log('Connecting to FTP server...');
+    console.log(`Host: ${ftpConfig.host}`);
+    console.log(`Port: ${ftpConfig.port}`);
+    console.log(`Secure: ${ftpConfig.secure}`);
+    console.log(`Explicit TLS: ${ftpConfig.explicitTls}`);
+    
     await client.access(ftpConfig);
     console.log('Connected successfully!');
     
