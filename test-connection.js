@@ -38,69 +38,73 @@ async function tryConnectionMethods() {
   const user = 'stockfiles';
   const password = 'tBDNWuVyV1@4M5JJUdMUio{k';
   
+  // Base options for port 21
+  const baseOptions = {
+    host,
+    user,
+    password,
+    port: 21
+  };
+  
   try {
-    // Method 1: Regular FTP (no encryption)
-    const regularFtp = {
-      host,
-      user,
-      password,
-      secure: false
-    };
+    // Define all connection methods to try
+    const connectionMethods = [
+      // Method 1: Explicit FTPS with TLS (most promising from previous test)
+      {
+        ...baseOptions,
+        secure: true,
+        explicitTls: true,
+        secureOptions: { rejectUnauthorized: false }
+      },
+      
+      // Method 2: Regular FTP (no encryption)
+      {
+        ...baseOptions,
+        secure: false
+      },
+      
+      // Method 3: Try with escaped special character in password
+      {
+        ...baseOptions,
+        password: 'tBDNWuVyV1@4M5JJUdMUio\\{k', // Escape the { character
+        secure: true,
+        explicitTls: true,
+        secureOptions: { rejectUnauthorized: false }
+      },
+      
+      // Method 4: Try with URL encoded special character in password
+      {
+        ...baseOptions,
+        password: 'tBDNWuVyV1@4M5JJUdMUio%7Bk', // URL encode the { character
+        secure: true,
+        explicitTls: true,
+        secureOptions: { rejectUnauthorized: false }
+      },
+      
+      // Method 5: Try with domain-qualified username
+      {
+        ...baseOptions,
+        user: 'stockfiles@globalftp.globaloring.com',
+        secure: true,
+        explicitTls: true,
+        secureOptions: { rejectUnauthorized: false }
+      }
+    ];
     
-    // Method 2: Implicit FTPS (encrypted from the start, usually on port 990)
-    const implicitFtps = {
-      host,
-      user,
-      password,
-      secure: true,
-      port: 990
-    };
-    
-    // Method 3: Explicit FTPS (starts unencrypted, then upgrades to TLS)
-    const explicitFtps = {
-      host,
-      user,
-      password,
-      secure: true,
-      explicitTls: true,
-      secureOptions: { rejectUnauthorized: false } // Allow self-signed certificates
-    };
-    
-    // Method 4: Explicit FTPS on port 990
-    const explicitFtps990 = {
-      host,
-      user,
-      password,
-      secure: true,
-      explicitTls: true,
-      port: 990,
-      secureOptions: { rejectUnauthorized: false } // Allow self-signed certificates
-    };
-    
-    // Method 5: Try with different username format 
-    const altCredentials = {
-      host,
-      user: 'stockfiles@globalftp.globaloring.com', // Try domain-qualified username
-      password,
-      secure: true,
-      explicitTls: true,
-      secureOptions: { rejectUnauthorized: false }
-    };
-    
-    // Try each method until one works
+    // Try each connection method
     console.log('Attempting to connect to FTP server with different methods...');
+    let successfulMethod = null;
     
-    if (await testConnection(regularFtp)) {
-      console.log('Success with regular FTP!');
-    } else if (await testConnection(explicitFtps)) { // Try explicit FTPS first since it got furthest
-      console.log('Success with explicit FTPS!');
-    } else if (await testConnection(implicitFtps)) {
-      console.log('Success with implicit FTPS!');
-    } else if (await testConnection(explicitFtps990)) {
-      console.log('Success with explicit FTPS on port 990!');
-    } else if (await testConnection(altCredentials)) {
-      console.log('Success with alternative credentials!');
-    } else {
+    for (let i = 0; i < connectionMethods.length; i++) {
+      const method = connectionMethods[i];
+      if (await testConnection(method)) {
+        console.log(`Success with connection method ${i + 1}!`);
+        successfulMethod = method;
+        break;
+      }
+    }
+    
+    if (!successfulMethod) {
       console.log('All connection attempts failed.');
       console.log('\nTroubleshooting tips:');
       console.log('1. Verify the server address is correct');
