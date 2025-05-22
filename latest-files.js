@@ -1,9 +1,21 @@
 // Import the basic-ftp package
 import * as ftp from 'basic-ftp';
-import { ftpConfig, folderPaths, excludedFiles } from './src/config.js';
+import { ftpConfig, folderConfigs, excludedFiles } from './src/config.js';
+import { sendAgeAlert } from './src/emailService.js';
 
 // Files to exclude
 const EXCLUDED_FILES = excludedFiles;
+
+/**
+ * Calculate days between two dates
+ * @param {Date} date - The date to compare
+ * @returns {number} Number of days
+ */
+function getDaysSince(date) {
+  const now = new Date();
+  const diffTime = Math.abs(now - date);
+  return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+}
 
 /**
  * Get the latest file from a directory
@@ -33,13 +45,17 @@ async function getLatestFileFromFolder(client, folderPath) {
     
     // Get the latest file
     const latestFile = files[0];
+    const daysSince = getDaysSince(latestFile.modifiedAt);
+    
     console.log(`Latest file: ${latestFile.name} (${latestFile.modifiedAt.toLocaleString()})`);
+    console.log(`Days since last update: ${daysSince}`);
     
     return {
       name: latestFile.name,
       date: latestFile.modifiedAt,
       size: latestFile.size,
-      path: folderPath
+      path: folderPath,
+      daysSince: daysSince
     };
   } catch (error) {
     console.error(`Error checking folder ${folderPath}:`, error.message);
@@ -65,12 +81,29 @@ async function checkLatestFiles() {
     console.log('Connected successfully!');
     
     const results = [];
+    const alertFolders = [];
     
     // Check each folder
-    for (const folderPath of folderPaths) {
-      const latestFile = await getLatestFileFromFolder(client, folderPath);
+    for (const folderConfig of folderConfigs) {
+      if (!folderConfig.path) continue;
+      
+      const latestFile = await getLatestFileFromFolder(client, folderConfig.path);
+      
       if (latestFile) {
         results.push(latestFile);
+        
+        // Check if the file is older than the threshold
+        if (latestFile.daysSince > folderConfig.threshold) {
+          console.log(`⚠️ Alert: Folder ${folderConfig.path} hasn't been updated in ${latestFile.daysSince} days`);
+          
+          alertFolders.push({
+            path: folderConfig.path,
+            fileName: latestFile.name,
+            lastUpdated: latestFile.date,
+            daysSinceUpdate: latestFile.daysSince,
+            threshold: folderConfig.threshold
+          });
+        }
       }
     }
     
@@ -84,8 +117,15 @@ async function checkLatestFiles() {
         console.log(`File: ${file.name}`);
         console.log(`Date: ${file.date.toLocaleString()}`);
         console.log(`Size: ${file.size} bytes`);
+        console.log(`Days since update: ${file.daysSince}`);
         console.log('----------------------------');
       });
+    }
+    
+    // Send alerts if any folders exceeded their threshold
+    if (alertFolders.length > 0) {
+      console.log(`\nSending alerts for ${alertFolders.length} folders...`);
+      await sendAgeAlert(alertFolders);
     }
     
   } catch (error) {
