@@ -23,6 +23,26 @@ export const folderConfigs = [
   {
     path: process.env.FOLDER_2_PATH,
     threshold: parseInt(process.env.FOLDER_2_THRESHOLD || '7')
+  },
+  {
+    path: process.env.FOLDER_3_PATH,
+    threshold: parseInt(process.env.FOLDER_3_THRESHOLD || '8')
+  },
+  {
+    path: process.env.FOLDER_4_PATH,
+    threshold: parseInt(process.env.FOLDER_4_THRESHOLD || '8')
+  },
+  {
+    path: process.env.FOLDER_5_PATH,
+    threshold: parseInt(process.env.FOLDER_5_THRESHOLD || '8')
+  },
+  {
+    path: process.env.FOLDER_6_PATH,
+    threshold: parseInt(process.env.FOLDER_6_THRESHOLD || '8')
+  },
+  {
+    path: process.env.FOLDER_7_PATH,
+    threshold: parseInt(process.env.FOLDER_7_THRESHOLD || '8')
   }
 ];
 

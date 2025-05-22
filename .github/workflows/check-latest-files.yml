@@ -36,6 +36,16 @@ jobs:
           FOLDER_1_THRESHOLD: ${{ secrets.FOLDER_1_THRESHOLD }}
           FOLDER_2_PATH: ${{ secrets.FOLDER_2_PATH }}
           FOLDER_2_THRESHOLD: ${{ secrets.FOLDER_2_THRESHOLD }}
+          FOLDER_3_PATH: ${{ secrets.FOLDER_3_PATH }}
+          FOLDER_3_THRESHOLD: ${{ secrets.FOLDER_3_THRESHOLD }}
+          FOLDER_4_PATH: ${{ secrets.FOLDER_4_PATH }}
+          FOLDER_4_THRESHOLD: ${{ secrets.FOLDER_4_THRESHOLD }}
+          FOLDER_5_PATH: ${{ secrets.FOLDER_5_PATH }}
+          FOLDER_5_THRESHOLD: ${{ secrets.FOLDER_5_THRESHOLD }}
+          FOLDER_6_PATH: ${{ secrets.FOLDER_6_PATH }}
+          FOLDER_6_THRESHOLD: ${{ secrets.FOLDER_6_THRESHOLD }}
+          FOLDER_7_PATH: ${{ secrets.FOLDER_7_PATH }}
+          FOLDER_7_THRESHOLD: ${{ secrets.FOLDER_7_THRESHOLD }}
         # If you want to use environment variables instead of config.js:
         # env:
         #   FTP_HOST: ${{ secrets.FTP_HOST }}

@@ -45,6 +45,21 @@ FOLDER_1_THRESHOLD=7
 
 FOLDER_2_PATH=/path/to/folder2
 FOLDER_2_THRESHOLD=7
+
+FOLDER_3_PATH=/TUICO/Processed
+FOLDER_3_THRESHOLD=8
+
+FOLDER_4_PATH=/FANNTE/Processed
+FOLDER_4_THRESHOLD=8
+
+FOLDER_5_PATH=/GMORS/Processed
+FOLDER_5_THRESHOLD=8
+
+FOLDER_6_PATH=/NAK/Processed
+FOLDER_6_THRESHOLD=8
+
+FOLDER_7_PATH=/PROGUM/Processed
+FOLDER_7_THRESHOLD=8
 ```
 
 ### Configuration Options:
@@ -148,6 +163,16 @@ jobs:
           FOLDER_1_THRESHOLD: ${{ secrets.FOLDER_1_THRESHOLD }}
           FOLDER_2_PATH: ${{ secrets.FOLDER_2_PATH }}
           FOLDER_2_THRESHOLD: ${{ secrets.FOLDER_2_THRESHOLD }}
+          FOLDER_3_PATH: ${{ secrets.FOLDER_3_PATH }}
+          FOLDER_3_THRESHOLD: ${{ secrets.FOLDER_3_THRESHOLD }}
+          FOLDER_4_PATH: ${{ secrets.FOLDER_4_PATH }}
+          FOLDER_4_THRESHOLD: ${{ secrets.FOLDER_4_THRESHOLD }}
+          FOLDER_5_PATH: ${{ secrets.FOLDER_5_PATH }}
+          FOLDER_5_THRESHOLD: ${{ secrets.FOLDER_5_THRESHOLD }}
+          FOLDER_6_PATH: ${{ secrets.FOLDER_6_PATH }}
+          FOLDER_6_THRESHOLD: ${{ secrets.FOLDER_6_THRESHOLD }}
+          FOLDER_7_PATH: ${{ secrets.FOLDER_7_PATH }}
+          FOLDER_7_THRESHOLD: ${{ secrets.FOLDER_7_THRESHOLD }}
 ```
 
 ## License
