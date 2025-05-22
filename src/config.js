@@ -14,11 +14,27 @@ export const ftpConfig = {
   secureOptions: { rejectUnauthorized: false }
 };
 
-// Folder paths to check
-export const folderPaths = [
-  process.env.FOLDER_1_PATH,
-  process.env.FOLDER_2_PATH
+// Folder paths and thresholds
+export const folderConfigs = [
+  {
+    path: process.env.FOLDER_1_PATH,
+    threshold: parseInt(process.env.FOLDER_1_THRESHOLD || '7')
+  },
+  {
+    path: process.env.FOLDER_2_PATH,
+    threshold: parseInt(process.env.FOLDER_2_THRESHOLD || '7')
+  }
 ];
+
+// Email configuration
+export const emailConfig = {
+  sender: process.env.SENDER_EMAIL,
+  password: process.env.SENDER_PASSWORD,
+  recipients: [
+    process.env.RECIPIENT_EMAIL_1,
+    process.env.RECIPIENT_EMAIL_2
+  ].filter(Boolean) // Filter out undefined or empty values
+};
 
 // Files to exclude
 export const excludedFiles = ['desktop.ini']; 

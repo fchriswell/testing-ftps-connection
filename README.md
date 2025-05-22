@@ -1,6 +1,6 @@
 # FTPS Latest File Checker
 
-This Node.js application connects to an FTPS server and retrieves the name of the latest file added to specified folders.
+This Node.js application connects to an FTPS server and retrieves the name of the latest file added to specified folders. It can also send email alerts if files haven't been updated within a specified threshold of days.
 
 ## Prerequisites
 
@@ -22,45 +22,87 @@ This Node.js application connects to an FTPS server and retrieves the name of th
 
 ## Configuration
 
-The connection details for the FTPS server are stored in `src/config.js`. You may need to modify these settings to match your FTPS server configuration:
+Create a `.env` file in the root directory based on the provided `env.example` file:
 
-```javascript
-export const ftpConfig = {
-  host: 'your-ftp-server.com',
-  user: 'your-username',
-  password: 'your-password',
-  secure: true // For FTPS
-};
+```
+# FTP Configuration
+FTP_HOST=your-ftp-server.com
+FTP_USERNAME=your-username
+FTP_PASSWORD=your-password
+FTP_PORT=21
+FTP_SECURE=true
+FTP_EXPLICIT_TLS=true
 
-export const folderPaths = [
-  '/path/to/folder1',
-  '/path/to/folder2'
-];
+# Email Configuration
+SENDER_EMAIL=your-email@example.com
+SENDER_PASSWORD=your-app-password
+RECIPIENT_EMAIL_1=recipient1@example.com
+RECIPIENT_EMAIL_2=recipient2@example.com
+
+# Folder Configuration
+FOLDER_1_PATH=/path/to/folder1
+FOLDER_1_THRESHOLD=7
+
+FOLDER_2_PATH=/path/to/folder2
+FOLDER_2_THRESHOLD=7
 ```
 
-> **SECURITY NOTE**: Never commit sensitive credentials to GitHub. Consider using environment variables for production deployments.
+### Configuration Options:
+
+- **FTP Configuration**: Set your FTP server connection details
+- **Email Configuration**: 
+  - `SENDER_EMAIL`: The email address to send alerts from
+  - `SENDER_PASSWORD`: App password for the sender email
+  - `RECIPIENT_EMAIL_1`, `RECIPIENT_EMAIL_2`: Email addresses to receive alerts
+- **Folder Configuration**:
+  - `FOLDER_X_PATH`: Path to the folder on the FTP server
+  - `FOLDER_X_THRESHOLD`: Number of days threshold for alerts (if the latest file is older than this many days, an alert will be sent)
+
+> **SECURITY NOTE**: Never commit sensitive credentials to GitHub. For GitHub Actions, use repository secrets.
 
 ## Usage
 
 To run the application:
 
 ```
-npm start
+npm run latest
 ```
 
-The application will connect to the FTPS server, check each configured folder, and print the name of the latest file in each folder to the console.
+The application will connect to the FTPS server, check each configured folder, and:
+1. Print the name of the latest file in each folder
+2. Check if the latest file is older than the threshold
+3. Send email alerts for any folders that exceed their threshold
 
 Example output:
 ```
 Connecting to FTP server...
 Connected successfully!
-Checking folder: /TTO/Processed
-Checking folder: /TEST/Processed
 
-LATEST FILES:
---------------
-/TTO/Processed: latest_file_1.txt
-/TEST/Processed: latest_file_2.txt
+Checking folder: /TTO/Processed
+Latest file: invoice.pdf (2023-05-23 14:30:45)
+Days since last update: 10
+⚠️ Alert: Folder /TTO/Processed hasn't been updated in 10 days
+
+Checking folder: /TEST/Processed
+Latest file: report.xlsx (2023-05-30 09:15:22)
+Days since last update: 3
+
+===== LATEST FILES SUMMARY =====
+Folder: /TTO/Processed
+File: invoice.pdf
+Date: 2023-05-23 14:30:45
+Size: 1254789 bytes
+Days since update: 10
+----------------------------
+Folder: /TEST/Processed
+File: report.xlsx
+Date: 2023-05-30 09:15:22
+Size: 987654 bytes
+Days since update: 3
+----------------------------
+
+Sending alerts for 1 folders...
+Alert email sent successfully: <message-id>
 FTP connection closed
 ```
 
@@ -90,7 +132,22 @@ jobs:
       - name: Install dependencies
         run: npm install
       - name: Run file checker
-        run: npm start
+        run: npm run latest
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          FTP_PORT: ${{ secrets.FTP_PORT }}
+          FTP_SECURE: ${{ secrets.FTP_SECURE }}
+          FTP_EXPLICIT_TLS: ${{ secrets.FTP_EXPLICIT_TLS }}
+          SENDER_EMAIL: ${{ secrets.SENDER_EMAIL }}
+          SENDER_PASSWORD: ${{ secrets.SENDER_PASSWORD }}
+          RECIPIENT_EMAIL_1: ${{ secrets.RECIPIENT_EMAIL_1 }}
+          RECIPIENT_EMAIL_2: ${{ secrets.RECIPIENT_EMAIL_2 }}
+          FOLDER_1_PATH: ${{ secrets.FOLDER_1_PATH }}
+          FOLDER_1_THRESHOLD: ${{ secrets.FOLDER_1_THRESHOLD }}
+          FOLDER_2_PATH: ${{ secrets.FOLDER_2_PATH }}
+          FOLDER_2_THRESHOLD: ${{ secrets.FOLDER_2_THRESHOLD }}
 ```
 
 ## License
