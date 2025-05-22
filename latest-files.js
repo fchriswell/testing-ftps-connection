@@ -104,6 +104,17 @@ async function checkLatestFiles() {
             threshold: folderConfig.threshold
           });
         }
+      } else {
+        // If no files found in the folder, treat it as exceeding the threshold
+        console.log(`⚠️ Alert: Folder ${folderConfig.path} has no files or hasn't been updated within threshold`);
+        
+        alertFolders.push({
+          path: folderConfig.path,
+          fileName: 'No files found',
+          lastUpdated: null,
+          daysSinceUpdate: folderConfig.threshold + 1, // Just to indicate it's over threshold
+          threshold: folderConfig.threshold
+        });
       }
     }
     
