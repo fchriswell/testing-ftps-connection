@@ -60,6 +60,9 @@ FOLDER_6_THRESHOLD=8
 
 FOLDER_7_PATH=/PROGUM/Processed
 FOLDER_7_THRESHOLD=8
+
+FOLDER_8_PATH=/HERCULES/Processed
+FOLDER_8_THRESHOLD=8
 ```
 
 ### Configuration Options:
@@ -173,6 +176,8 @@ jobs:
           FOLDER_6_THRESHOLD: ${{ secrets.FOLDER_6_THRESHOLD }}
           FOLDER_7_PATH: ${{ secrets.FOLDER_7_PATH }}
           FOLDER_7_THRESHOLD: ${{ secrets.FOLDER_7_THRESHOLD }}
+          FOLDER_8_PATH: ${{ secrets.FOLDER_8_PATH }}
+          FOLDER_8_THRESHOLD: ${{ secrets.FOLDER_8_THRESHOLD }}
 ```
 
 ## License

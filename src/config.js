@@ -43,6 +43,10 @@ export const folderConfigs = [
   {
     path: process.env.FOLDER_7_PATH,
     threshold: parseInt(process.env.FOLDER_7_THRESHOLD || '8')
+  },
+  {
+    path: process.env.FOLDER_8_PATH,
+    threshold: parseInt(process.env.FOLDER_8_THRESHOLD || '8')
   }
 ];
 
