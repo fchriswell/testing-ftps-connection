@@ -2,7 +2,7 @@ name: Check Latest Files
 
 on:
   schedule:
-    - cron: '0 15 * * *'  # Run at 9AM Central Time (15:00 UTC) every day
+    - cron: '0 15 * * 1-5'  # Run at 9AM Central Time (15:00 UTC) Monday-Friday only
   workflow_dispatch:  # Allow manual runs
 
 jobs:
